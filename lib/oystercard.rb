@@ -10,4 +10,9 @@ class Oystercard
     fail "limit exceeded of #{Oystercard::MAXIMUM_BALANCE}" if amount + balance > MAXIMUM_BALANCE
     @balance += amount
   end
+  
+  def deduct(amount)
+    fail "Failed Operation: Cannot go below 0" if balance - amount < 0
+    @balance -= amount
+  end
 end

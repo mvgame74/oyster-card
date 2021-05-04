@@ -16,4 +16,14 @@ RSpec.describe Oystercard do
       expect { subject.top_up 1 }.to raise_error "limit exceeded of #{Oystercard::MAXIMUM_BALANCE}"
     end
   end
+
+  describe "#deduct" do
+    it 'should reduce the balance' do
+      subject.top_up(10)
+      expect{ subject.deduct(5)}.to change{ subject.balance }.by (-5)
+    end
+    it "raises error if balance is less than 0" do
+      expect { subject.deduct(5) }.to raise_error "Failed Operation: Cannot go below 0"
+    end
+  end 
 end
