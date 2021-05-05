@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance 
+  attr_reader :balance, :entry_station
 
   MAXIMUM_BALANCE = 90
   BALANCE_LIMIT = 1
@@ -8,6 +8,7 @@ class Oystercard
   def initialize
     @balance = 0
     @status = false
+    @entry_station
   end
 
   def top_up(amount)
@@ -17,6 +18,7 @@ class Oystercard
 
   def touch_in
     fail 'Not enough funds' if @balance < BALANCE_LIMIT
+    @entry_station = "Holborn"
     @status = true
   end
 

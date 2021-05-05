@@ -32,9 +32,14 @@ RSpec.describe Oystercard do
         subject.top_up(Oystercard::BALANCE_LIMIT)
         subject.touch_in
       end
-      
+            
       it 'should return true after touching in' do
         expect(subject.in_journey?).to eq(true)
+      end
+
+      it 'should keep the information of the entry_station' do
+        #station = double("Holborn")
+        expect(subject.entry_station).to eq("Holborn")
       end
     
       it 'should return false after touching out' do
