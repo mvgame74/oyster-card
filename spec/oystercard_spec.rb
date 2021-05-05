@@ -20,30 +20,32 @@ RSpec.describe Oystercard do
   end
 
   describe "#deduct" do
-    it 'should reduce the balance' do
-      subject.top_up(10)
-      expect{ subject.deduct(5)}.to change{ subject.balance }.by (-5)
-    end
-    it "raises error if balance is less than 0" do
-      expect { subject.deduct(5) }.to raise_error "Failed Operation: Cannot go below 0"
-    end
+    # it 'should reduce the balance' do
+    #   subject.top_up(10)
+    #   expect{ subject.deduct(5)}.to change{ subject.balance }.by (-5)
+    # end
   end 
 
   describe '#in_journey?' do
     describe 'validation for touch in or out' do
-      before  {subject.top_up(Oystercard::BALANCE_LIMIT)}
+      before  do 
+        subject.top_up(Oystercard::BALANCE_LIMIT)
+        subject.touch_in
+      end
       
       it 'should return true after touching in' do
-        subject.touch_in
         expect(subject.in_journey?).to eq(true)
       end
     
       it 'should return false after touching out' do
-        subject.touch_in
         subject.touch_out
         expect(subject.in_journey?).to eq(false)
       end
-  end
+
+      it 'charges the minimum fare on touch out' do
+        expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_FARE)
+      end
+    end
 
     it 'raise an error if user touch_in with 0 balance' do
       expect { subject.touch_in }.to raise_error 'Not enough funds'
