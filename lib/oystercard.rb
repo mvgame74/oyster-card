@@ -4,6 +4,7 @@ class Oystercard
   
   def initialize
     @balance = 0
+    @status = false
   end
 
   def top_up(amount)
@@ -14,5 +15,17 @@ class Oystercard
   def deduct(amount)
     fail "Failed Operation: Cannot go below 0" if balance - amount < 0
     @balance -= amount
+  end
+
+  def touch_in
+    @status = true
+  end
+
+  def in_journey?
+    @status
+  end
+
+  def touch_out
+    @status = false
   end
 end

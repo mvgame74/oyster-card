@@ -1,3 +1,5 @@
+# require './lib/oystercard.rb'
+
 require 'oystercard'
 
 RSpec.describe Oystercard do
@@ -26,4 +28,25 @@ RSpec.describe Oystercard do
       expect { subject.deduct(5) }.to raise_error "Failed Operation: Cannot go below 0"
     end
   end 
+
+  describe '#in_journey?' do
+    it 'should allow users to touch in' do
+      expect(subject).to respond_to(:touch_in)
+    end
+
+    it 'should return true after touching in' do
+      subject.touch_in
+      expect(subject.in_journey?).to eq(true)
+    end
+
+    it 'should allow users to touch out' do
+      expect(subject).to respond_to(:touch_out)
+    end
+    
+    it 'should return false after touching out' do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey?).to eq(false)
+    end
+  end
 end
