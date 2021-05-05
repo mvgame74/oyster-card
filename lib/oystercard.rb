@@ -7,7 +7,6 @@ class Oystercard
   
   def initialize
     @balance = 0
-    @status = false
     @entry_station
   end
 
@@ -16,25 +15,23 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station)
     fail 'Not enough funds' if @balance < BALANCE_LIMIT
-    @entry_station = "Holborn"
-    @status = true
+    @entry_station = station
   end
 
   def in_journey?
-    @status
+    !@entry_station.nil?
   end
 
   def touch_out
     deduct
-    @status = false
+    @entry_station = nil
   end
 
   private
 
   def deduct(amount=MINIMUM_FARE)
-    # fail "Failed Operation: Cannot go below 0" if balance - amount < 0
     @balance -= amount
   end
 end

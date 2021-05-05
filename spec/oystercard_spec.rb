@@ -27,10 +27,11 @@ RSpec.describe Oystercard do
   end 
 
   describe '#in_journey?' do
+    let (:station){ double :station }
     describe 'validation for touch in or out' do
       before  do 
         subject.top_up(Oystercard::BALANCE_LIMIT)
-        subject.touch_in
+        subject.touch_in(station)
       end
             
       it 'should return true after touching in' do
@@ -39,12 +40,17 @@ RSpec.describe Oystercard do
 
       it 'should keep the information of the entry_station' do
         #station = double("Holborn")
-        expect(subject.entry_station).to eq("Holborn")
+        expect(subject.entry_station).to eq(station)
       end
     
       it 'should return false after touching out' do
         subject.touch_out
         expect(subject.in_journey?).to eq(false)
+      end
+
+      it 'forget the entry station on touch out' do
+        subject.touch_out
+        expect(subject.entry_station).to eq(nil)
       end
 
       it 'charges the minimum fare on touch out' do
@@ -53,7 +59,7 @@ RSpec.describe Oystercard do
     end
 
     it 'raise an error if user touch_in with 0 balance' do
-      expect { subject.touch_in }.to raise_error 'Not enough funds'
+      expect { subject.touch_in(station) }.to raise_error 'Not enough funds'
     end
   end
 end
