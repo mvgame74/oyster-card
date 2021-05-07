@@ -3,8 +3,8 @@
 require 'oystercard'
 
 RSpec.describe Oystercard do
-  let(:entry_station) {:entry_station} 
-  let(:exit_station) {:exit_station} 
+  let(:entry_station) {double(name: "Holborn", zone: 1)} 
+  let(:exit_station) {double(name: "Kennington", zone: 1)}
   describe "#balance" do
     it "should return the balance on the card" do
       expect(subject.balance).to eq (0)
@@ -40,27 +40,15 @@ RSpec.describe Oystercard do
       it 'should return true after touching in' do
         expect(subject.in_journey?).to eq(true)
       end
-
-      it 'should keep the information of the entry_station' do
-        #station = double("Holborn")
-        expect(subject.entry_station).to eq(entry_station)
-      end
     
       it 'should return false after touching out' do
         subject.touch_out(exit_station)
         expect(subject.in_journey?).to eq(false)
       end
-      
-      it 'should record the information of both entry & exit station' do
-        subject.touch_out(exit_station)
-        #expect(subject.exit_station).to eq(exit_station)
-          expect(subject.journeys).to eq([{entry: entry_station, exit: exit_station}])
-      end
 
-      it 'forget the entry station on touch out' do
+      it 'forget the journey on touch out' do
         subject.touch_out(exit_station)
-        expect(subject.entry_station).to eq(nil)
-        expect(subject.exit_station).to eq(nil)
+        expect(subject.journey).to eq(nil)
       end
 
       it 'charges the minimum fare on touch out' do
